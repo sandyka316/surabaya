@@ -76,8 +76,10 @@ const HomeSection2: React.FunctionComponent<Props> = () => {
   }, [menu])
 
   const handleNavigation = React.useCallback((url?: string) => {
-    if (url) {
-      router.push(url)
+    if (url && url.startsWith('/')) {
+      router.push(url).catch((error) => {
+        console.error('Navigation error:', error)
+      })
     }
   }, [router])
 
@@ -226,7 +228,15 @@ const HomeSection2: React.FunctionComponent<Props> = () => {
                   {apaDiSurabaya.map((item, idx) => (
                     <Box 
                       key={idx} 
+                      role={item.url ? 'button' : undefined}
+                      tabIndex={item.url ? 0 : undefined}
                       onClick={item.url ? () => handleNavigation(item.url) : undefined}
+                      onKeyDown={item.url ? (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          handleNavigation(item.url)
+                        }
+                      } : undefined}
                       sx={(theme) => ({ 
                         flex: 1, 
                         display: 'flex', 
@@ -239,9 +249,13 @@ const HomeSection2: React.FunctionComponent<Props> = () => {
                         ...(item.url && {
                           cursor: 'pointer',
                           transition: 'transform 0.2s ease-in-out, opacity 0.2s ease-in-out',
-                          '&:hover': {
+                          '&:hover, &:focus': {
                             transform: 'scale(1.05)',
                             opacity: 0.85,
+                          },
+                          '&:focus': {
+                            outline: `2px solid ${theme.palette.primary.light}`,
+                            outlineOffset: 2,
                           },
                         }),
                       })}
