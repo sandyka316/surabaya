@@ -3,6 +3,7 @@ import { Grid, Box, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { styled } from '@mui/material/styles'
 import { orderBy } from 'lodash'
+import { useRouter } from 'next/router'
 import CarouselSmall from 'components/carousel.small'
 import { Menu as MenuType } from 'components/header'
 import { fontSize, borderRadius } from 'styles/theme'
@@ -17,7 +18,7 @@ const BoxStyled = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  padding: theme.spacing(2),
+  padding: theme. spacing(2),
   '& .MuiTypography-root': {
     fontSize: fontSize + 8,
     textTransform: 'uppercase',
@@ -32,7 +33,7 @@ const BoxStyled = styled(Box)(({ theme }) => ({
   },
   [theme.breakpoints.down('sm')]: {
     borderRadius: theme.spacing(borderRadius),
-    '& .MuiTypography-root': {
+    '& . MuiTypography-root': {
       fontSize: fontSize + 4,
       '& span': {
         fontSize: fontSize + 14,
@@ -56,15 +57,15 @@ function findMenu(array: schema['schemas']['Menu'][], title: string) {
   return object
 }
 
-
 const HomeSection2: React.FunctionComponent<Props> = () => {
+  const router = useRouter()
   const { downSm } = React.useContext(BreakpointsContext)
   const { data: contents } = useQuery<schema['schemas']['Organization']>(['contents'])
   const menu = React.useMemo(() => contents?.menu || [], [contents])
   const { textToSpeech } = useTextToSpeech()
   const whatsInSurabaya: MenuType[] = React.useMemo(() => {
     const result = findMenu(menu, 'Ada Apa di Surabaya')
-    return menu.length > 0 ? (result ? orderBy(result['child'], ['order', 'asc']) : []) : []
+    return menu. length > 0 ? (result ? orderBy(result['child'], ['order', 'asc']) : []) : []
   }, [menu])
 
   // Placeholder data untuk deskripsi dan icon
@@ -90,7 +91,8 @@ const HomeSection2: React.FunctionComponent<Props> = () => {
           <img src="/images/icon/Logo-Bisnis_Investasi.svg" alt="Bisnis dan Investasi" style={{ width: 50, height: 50 }} />
         </Box>
       ), 
-      label: 'Bisnis dan Investasi' 
+      label: 'Bisnis dan Investasi',
+      url: '/bisnis-investasi'
     },
     { 
       icon: (
@@ -98,7 +100,8 @@ const HomeSection2: React.FunctionComponent<Props> = () => {
           <img src="/images/icon/Logo-Transportasi.svg" alt="Transportasi" style={{ width: 50, height: 50 }} />
         </Box>
       ), 
-      label: 'Transportasi' 
+      label: 'Transportasi',
+      url: '/transportasi'
     },
     { 
       icon: (
@@ -106,13 +109,18 @@ const HomeSection2: React.FunctionComponent<Props> = () => {
           <img src="/images/icon/Logo-Wisata.svg" alt="Wisata" style={{ width: 50, height: 50 }} />
         </Box>
       ), 
-      label: 'Wisata' 
+      label: 'Wisata',
+      url: '/wisata'
     },
   ]
 
+  const handleNavigate = (url: string) => {
+    router.push(url)
+  }
+
   return (
     <Box sx={(theme) => ({
-      bgcolor: theme.palette.mode === 'dark' ? 'rgba(2, 29, 29, 0.7)' : '#fff',
+      bgcolor: theme. palette.mode === 'dark' ? 'rgba(2, 29, 29, 0. 7)' : '#fff',
       borderRadius: 6,
       px: downSm ? 2 : 30,
       py: downSm ? 2 : 10,
@@ -149,48 +157,49 @@ const HomeSection2: React.FunctionComponent<Props> = () => {
           <Grid container direction="column" spacing={downSm ? 2 : 3}>
             {/* Atas: Tentang Surabaya */}
             <Grid item>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', gap: 2,  }}>
-              {/* Teks Vertikal */}
-              <Box sx={{
-                // bgcolor: (theme) => theme.palette.background.paper,
-                backgroundColor: '#006462',
-                borderRadius: 5,
-                px: 2,
-                minWidth: 40,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                writingMode: 'vertical-rl',
-                textOrientation: 'mixed',
-                color: (theme) => theme.palette.text.primary,
-                fontWeight: 700,
-                fontSize: 16,
-                letterSpacing: 1,
-                textAlign: 'center',
-              }}>
-                {tentangSurabaya.title}
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', gap: 2 }}>
+                {/* Teks Vertikal */}
+                <Box sx={{
+                  // bgcolor: (theme) => theme.palette.background.paper,
+                  backgroundColor: '#006462',
+                  borderRadius: 5,
+                  px: 2,
+                  minWidth: 40,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  writingMode: 'vertical-rl',
+                  textOrientation: 'mixed',
+                  color: (theme) => theme.palette.text. primary,
+                  fontWeight: 700,
+                  fontSize: 16,
+                  letterSpacing: 1,
+                  textAlign: 'center',
+                }}>
+                  {tentangSurabaya.title}
+                </Box>
+                {/* Box Deskripsi */}
+                <Box sx={{
+                  flex: 1,
+                  border: (theme) => `2px solid ${theme.palette.background.paper}`,
+                  borderRadius: 5,
+                  px: 3,
+                  py: 2,
+                  // bgcolor: (theme) => `${theme.palette.text.primary}`,
+                  backgroundColor: '#fff',
+                  minHeight: 120,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                }}>
+                  {tentangSurabaya.icon}
+                  <Typography variant="body2" sx={(theme) => ({ color: theme. palette.text.secondary, fontSize: 15, lineHeight: 1.6 })}>
+                    {tentangSurabaya. desc}
+                  </Typography>
+                </Box>
               </Box>
-              {/* Box Deskripsi */}
-              <Box sx={{
-                flex: 1,
-                border: (theme) => `2px solid ${theme.palette.background.paper}`,
-                borderRadius: 5,
-                px: 3,
-                py: 2,
-                // bgcolor: (theme) => `${theme.palette.text.primary}`,
-                backgroundColor: '#fff',
-                minHeight: 120,
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-              }}>
-                {tentangSurabaya.icon}
-                <Typography variant="body2" sx={(theme) => ({ color: theme.palette.text.secondary, fontSize: 15, lineHeight: 1.6 })}>
-                  {tentangSurabaya.desc}
-                </Typography>
-              </Box>
-            </Box>
-          </Grid>
+            </Grid>
+            
             {/* Bawah: Ada Apa di Surabaya */}
             <Grid item>
               <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', gap: 2 }}>
@@ -209,9 +218,38 @@ const HomeSection2: React.FunctionComponent<Props> = () => {
                   minHeight: 120,
                 }}>
                   {apaDiSurabaya.map((item, idx) => (
-                    <Box key={idx} sx={(theme) => ({ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: theme.palette.text.primary, borderRight: idx < 2 ? '1px solid #fff3' : 'none', px: 1 })}>
+                    <Box 
+                      key={idx} 
+                      onClick={() => handleNavigate(item. url)}
+                      sx={(theme) => ({ 
+                        flex: 1, 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        color: theme.palette.text. primary, 
+                        borderRight: idx < 2 ? '1px solid #fff3' : 'none', 
+                        px: 1,
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease-in-out',
+                        '&:hover': {
+                          transform: 'scale(1.05)',
+                          opacity: 0.85,
+                        }
+                      })}
+                    >
                       {item.icon}
-                      <Typography variant="subtitle1" sx={(theme) => ({ fontWeight: 400, fontSize: 16, textAlign: 'center', color: theme.palette.text.primary })}>{item.label}</Typography>
+                      <Typography 
+                        variant="subtitle1" 
+                        sx={(theme) => ({ 
+                          fontWeight: 400, 
+                          fontSize: 16, 
+                          textAlign: 'center', 
+                          color: theme.palette.text.primary 
+                        })}
+                      >
+                        {item.label}
+                      </Typography>
                     </Box>
                   ))}
                 </Box>
