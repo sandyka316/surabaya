@@ -3,6 +3,7 @@ import { Grid, Box, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { styled } from '@mui/material/styles'
 import { orderBy } from 'lodash'
+import { useRouter } from 'next/router'
 import CarouselSmall from 'components/carousel.small'
 import { Menu as MenuType } from 'components/header'
 import { fontSize, borderRadius } from 'styles/theme'
@@ -57,8 +58,15 @@ function findMenu(array: schema['schemas']['Menu'][], title: string) {
 }
 
 
+interface ApaDiSurabayaItem {
+  icon: React.ReactNode
+  label: string
+  url?: string
+}
+
 const HomeSection2: React.FunctionComponent<Props> = () => {
   const { downSm } = React.useContext(BreakpointsContext)
+  const router = useRouter()
   const { data: contents } = useQuery<schema['schemas']['Organization']>(['contents'])
   const menu = React.useMemo(() => contents?.menu || [], [contents])
   const { textToSpeech } = useTextToSpeech()
@@ -66,6 +74,12 @@ const HomeSection2: React.FunctionComponent<Props> = () => {
     const result = findMenu(menu, 'Ada Apa di Surabaya')
     return menu.length > 0 ? (result ? orderBy(result['child'], ['order', 'asc']) : []) : []
   }, [menu])
+
+  const handleNavigation = React.useCallback((url?: string) => {
+    if (url) {
+      router.push(url)
+    }
+  }, [router])
 
   // Placeholder data untuk deskripsi dan icon
   const tentangSurabaya = {
@@ -83,7 +97,7 @@ const HomeSection2: React.FunctionComponent<Props> = () => {
     ),
   }
 
-  const apaDiSurabaya = [
+  const apaDiSurabaya: ApaDiSurabayaItem[] = [
     { 
       icon: (
         <Box sx={{ width: 40, height: 40, borderRadius: '10px', mb: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -106,7 +120,8 @@ const HomeSection2: React.FunctionComponent<Props> = () => {
           <img src="/images/icon/Logo-Wisata.svg" alt="Wisata" style={{ width: 50, height: 50 }} />
         </Box>
       ), 
-      label: 'Wisata' 
+      label: 'Wisata',
+      url: '/wisata'
     },
   ]
 
@@ -209,7 +224,28 @@ const HomeSection2: React.FunctionComponent<Props> = () => {
                   minHeight: 120,
                 }}>
                   {apaDiSurabaya.map((item, idx) => (
-                    <Box key={idx} sx={(theme) => ({ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: theme.palette.text.primary, borderRight: idx < 2 ? '1px solid #fff3' : 'none', px: 1 })}>
+                    <Box 
+                      key={idx} 
+                      onClick={item.url ? () => handleNavigation(item.url) : undefined}
+                      sx={(theme) => ({ 
+                        flex: 1, 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        color: theme.palette.text.primary, 
+                        borderRight: idx < 2 ? '1px solid #fff3' : 'none', 
+                        px: 1,
+                        ...(item.url && {
+                          cursor: 'pointer',
+                          transition: 'transform 0.2s ease-in-out, opacity 0.2s ease-in-out',
+                          '&:hover': {
+                            transform: 'scale(1.05)',
+                            opacity: 0.85,
+                          },
+                        }),
+                      })}
+                    >
                       {item.icon}
                       <Typography variant="subtitle1" sx={(theme) => ({ fontWeight: 400, fontSize: 16, textAlign: 'center', color: theme.palette.text.primary })}>{item.label}</Typography>
                     </Box>
