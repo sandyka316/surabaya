@@ -8,56 +8,9 @@ import MediaHeader from 'components/media.header'
 import { BoxStyled } from 'pages/id/videos/index'
 import { AccessibilityContext } from 'contexts/accessibility'
 import { getOrganization } from 'utils/services/organization'
+import wisataData from 'data/wisata.json'
 
-interface WisataItem {
-  id: number
-  title: string
-  description: string
-  image: string
-}
-
-const wisataData: WisataItem[] = [
-  {
-    id: 1,
-    title: 'Tugu Pahlawan',
-    description: 'Monumen bersejarah yang menjadi simbol kepahlawanan rakyat Surabaya dalam pertempuran 10 November 1945.',
-    image: '/images/wisata/tugu-pahlawan.jpg',
-  },
-  {
-    id: 2,
-    title: 'Kebun Binatang Surabaya',
-    description: 'Kebun binatang tertua di Indonesia yang memiliki koleksi satwa lengkap dan menjadi destinasi wisata keluarga.',
-    image: '/images/wisata/kebun-binatang.jpg',
-  },
-  {
-    id: 3,
-    title: 'House of Sampoerna',
-    description: 'Museum dan pabrik rokok bersejarah dengan arsitektur kolonial Belanda yang indah.',
-    image: '/images/wisata/house-of-sampoerna.jpg',
-  },
-  {
-    id: 4,
-    title: 'Jembatan Suramadu',
-    description: 'Jembatan terpanjang di Indonesia yang menghubungkan Pulau Jawa dan Pulau Madura.',
-    image: '/images/wisata/suramadu.jpg',
-  },
-  {
-    id: 5,
-    title: 'Submarine Monument',
-    description: 'Monumen kapal selam KRI Pasopati 410 yang menjadi museum dan objek wisata sejarah maritim.',
-    image: '/images/wisata/submarine.jpg',
-  },
-  {
-    id: 6,
-    title: 'Pantai Kenjeran',
-    description: 'Pantai populer di Surabaya dengan pemandangan indah dan berbagai wahana rekreasi.',
-    image: '/images/wisata/kenjeran.jpg',
-  },
-]
-
-interface Props {}
-
-const Wisata: NextPage<Props> = () => {
+const Wisata: NextPage = () => {
   const accessibility = React.useContext(AccessibilityContext)
 
   return (
